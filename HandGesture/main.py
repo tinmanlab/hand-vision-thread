@@ -3,17 +3,20 @@
 import cv2
 import mediapipe as mp
 import time
+#import serial
 
 from QuickCaptureModule import Capture
 from GestureModule import GestureHandler
-#from SerialModule import SerialObject
 
 model_path = 'gesture_recognizer.task'
 
 # Open a video capture stream
-#cap = Capture('http://192.168.1.67:4747/video') # DroidCam
-#cap = Capture('http://192.168.1.183:81/stream') # ESP32-CAM
-cap = Capture() # Webcam
+#cap = Capture('http://192.168.1.67:4747/video') # DroidCam1
+#cap = Capture('http://192.168.51.2:4747/video') # DroidCam2
+#cap = Capture('http://192.168.1.183:81/stream') # ESP32-CAM1
+cap = Capture('http://192.168.51.172:81/stream') # ESP32-CAM2
+
+#cap = Capture() # Webcam
 
 # teensy connected to COM9
 #teensy = serial.Serial(port='COM9', baudrate=115200, timeout=0, writeTimeout=0)

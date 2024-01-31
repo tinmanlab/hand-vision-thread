@@ -15,6 +15,7 @@ class GestureHandler:
         self.score = 0
         self.prev_time = time.time()
         self.width, self.height = cap.size()
+        self.prev_frame_rate = 0
 
         #self.cap = cap
 
@@ -69,6 +70,7 @@ class GestureHandler:
     def get_frame(self, image):
         curr_time = time.time()
         frame_rate = 1 / (curr_time - self.prev_time)
+        #self.prev_frame_rate = frame_rate
         self.prev_time = curr_time
 
         if self.is_cap_size_over(320,240):
