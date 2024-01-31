@@ -1,3 +1,6 @@
+[Reference]
+
+https://developers.google.com/mediapipe/solutions/vision/gesture_recognizer
 
 [Step 1]. Clone the repository
 

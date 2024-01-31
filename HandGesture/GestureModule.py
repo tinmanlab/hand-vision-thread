@@ -1,3 +1,5 @@
+# Reference : https://developers.google.com/mediapipe/solutions/vision/gesture_recognizer
+
 import cv2
 import mediapipe as mp
 import time
