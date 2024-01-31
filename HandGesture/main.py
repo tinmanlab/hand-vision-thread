@@ -4,6 +4,7 @@ import time
 
 from QuickCaptureModule import Capture
 from GestureModule import GestureHandler
+#from SerialModule import SerialObject
 
 model_path = 'gesture_recognizer.task'
 
@@ -11,6 +12,9 @@ model_path = 'gesture_recognizer.task'
 #cap = Capture('http://192.168.1.67:4747/video') # DroidCam
 #cap = Capture('http://192.168.1.183:81/stream') # ESP32-CAM
 cap = Capture() # Webcam
+
+# teensy connected to COM9
+#teensy = serial.Serial(port='COM9', baudrate=115200, timeout=0, writeTimeout=0)
 
 # Set the callback function to handle the gesture recognition result
 handler = GestureHandler(cap)
@@ -69,6 +73,7 @@ with mp.tasks.vision.GestureRecognizer.create_from_options(options) as recognize
             if visual_queue > 0.5:
                 text_label = "Grasp"
                 # We can add a function here to control the robot arm
+                #teensy.write('*1,{}\n'.format(repr(weight)).encode('Ascii'))
 
             text = text_label + " (" + str(round(visual_queue,2)) + ")"
 
