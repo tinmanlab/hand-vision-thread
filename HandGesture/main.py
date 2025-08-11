@@ -3,23 +3,30 @@
 import cv2
 import mediapipe as mp
 import time
-#import serial
+import os
+from dotenv import load_dotenv
+# import serial  # Uncomment if using serial communication
 
 from QuickCaptureModule import Capture
 from GestureModule import GestureHandler
 
-model_path = 'gesture_recognizer.task'
+# Load environment variables
+load_dotenv()
+
+# Configuration
+model_path = os.getenv('MODEL_PATH', 'gesture_recognizer.task')
+camera_url = os.getenv('CAMERA_URL', '0')
 
 # Open a video capture stream
-#cap = Capture('http://192.168.1.67:4747/video') # DroidCam1
-#cap = Capture('http://192.168.51.2:4747/video') # DroidCam2
-#cap = Capture('http://192.168.1.183:81/stream') # ESP32-CAM1
-cap = Capture('http://192.168.51.172:81/stream') # ESP32-CAM2
+if camera_url == '0':
+    cap = Capture()  # Webcam
+else:
+    cap = Capture(camera_url)  # Network camera
 
-#cap = Capture() # Webcam
-
-# teensy connected to COM9
-#teensy = serial.Serial(port='COM9', baudrate=115200, timeout=0, writeTimeout=0)
+# Serial configuration (uncomment if needed)
+# serial_port = os.getenv('SERIAL_PORT', 'COM9')
+# serial_baudrate = int(os.getenv('SERIAL_BAUDRATE', 115200))
+# teensy = serial.Serial(port=serial_port, baudrate=serial_baudrate, timeout=0, writeTimeout=0)
 
 # Set the callback function to handle the gesture recognition result
 handler = GestureHandler(cap)
@@ -65,17 +72,15 @@ with mp.tasks.vision.GestureRecognizer.create_from_options(options) as recognize
             
             gesture_detected = 0
 
-            # When the gesture is detected, the score is 1.0 or its detection score
-            '''
-            0 - Unrecognized gesture, label: Unknown
-            1 - Closed fist, label: Closed_Fist
-            2 - Open palm, label: Open_Palm
-            3 - Pointing up, label: Pointing_Up
-            4 - Thumbs down, label: Thumb_Down
-            5 - Thumbs up, label: Thumb_Up
-            6 - Victory, label: Victory
-            7 - Love, label: ILoveYou
-            '''    
+            # Gesture labels mapping:
+            # 0 - Unknown
+            # 1 - Closed_Fist
+            # 2 - Open_Palm
+            # 3 - Pointing_Up
+            # 4 - Thumb_Down
+            # 5 - Thumb_Up
+            # 6 - Victory
+            # 7 - ILoveYou    
             if handler.get_label() == "Thumb_Up":
                 gesture_detected = handler.get_score()
                 #gesture_detected = 1
@@ -87,8 +92,9 @@ with mp.tasks.vision.GestureRecognizer.create_from_options(options) as recognize
             # When the score is greater than 0.5, we can say that the gesture is maintained
             if visual_queue > 0.5:
                 text_label = "Grasp"
-                # We can add a function here to control the robot arm
-                #teensy.write('*1,{}\n'.format(repr(weight)).encode('Ascii'))
+                # Control the robot arm if serial is connected
+                # if 'teensy' in locals():
+                #     teensy.write('*1,{}\n'.format(repr(visual_queue)).encode('Ascii'))
 
             text = text_label + " (" + str(round(visual_queue,2)) + ")"
 

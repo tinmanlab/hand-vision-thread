@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Virtual Environment
+venv*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment Variables
+.env
+.env.*
+*.env
+config.py
+config.json
+
+# Logs
+*.log
+logs/
+
+# MediaPipe Models
+*.task
+*.tflite
+*.pb
+
+# Test files
+test_*.py
+*_test.py
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+
+# Serial port configs
+serial_config.json
+
+# IP addresses config
+network_config.json
+camera_urls.txt

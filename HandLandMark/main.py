@@ -4,23 +4,38 @@
 import math
 import cv2
 import numpy as np
-import serial
+import os
+from dotenv import load_dotenv
+# import serial  # Uncomment if using serial communication
 
 from HandTrackingModule import HandDetector
 from QuickCaptureModule import Capture
-#from SerialModule import SerialObject
+# from SerialModule import SerialObject  # Uncomment if using SerialModule
 
-detector = HandDetector(maxHands=1, detectionCon=0.5, minTrackCon=0.5)
+# Load environment variables
+load_dotenv()
 
-# Use the TCP/IP address of your mobile phone
-#cap = Capture('http://192.168.?.?:?/video')
+# Configuration
+max_hands = int(os.getenv('MAX_HANDS', 1))
+detection_conf = float(os.getenv('DETECTION_CONFIDENCE', 0.5))
+tracking_conf = float(os.getenv('TRACKING_CONFIDENCE', 0.5))
+camera_url = os.getenv('CAMERA_URL', '0')
 
-# teensy connected to COM16
-#teensy = serial.Serial(port='COM9', baudrate=115200, timeout=0, writeTimeout=0)
+# Initialize detector
+detector = HandDetector(maxHands=max_hands, detectionCon=detection_conf, minTrackCon=tracking_conf)
+
+# Initialize camera
+if camera_url == '0':
+    cap = Capture()  # Webcam
+else:
+    cap = Capture(camera_url)  # Network camera
+
+# Serial configuration (uncomment if needed)
+# serial_port = os.getenv('SERIAL_PORT', 'COM9')
+# serial_baudrate = int(os.getenv('SERIAL_BAUDRATE', 115200))
+# teensy = serial.Serial(port=serial_port, baudrate=serial_baudrate, timeout=0, writeTimeout=0)
+
 length = 0
-
-# Default camera view on your PC
-cap = Capture()
 
 if __name__ == "__main__":
 
@@ -49,7 +64,9 @@ if __name__ == "__main__":
             
             print(length)
             
-            #teensy.write('*1,{}\n'.format(repr(length)).encode('Ascii'))
+            # Send data via serial if connected
+            # if 'teensy' in locals():
+            #     teensy.write('*1,{}\n'.format(repr(length)).encode('Ascii'))
 
         cv2.imshow('', img)
 
